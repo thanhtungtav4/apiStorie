@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\storiesController;
+use App\Http\Controllers\Api\StoriesController;
 use App\Http\Controllers\Api\ChapterController;
 use App\Http\Controllers\Api\AuthenticatedController;
 /*
@@ -21,24 +21,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
     Route::prefix('stories')->group(function () {
-        Route::get('/lists', 'storiesController@lists');
-        Route::get('/detail', 'storiesController@detail');
-        Route::post('/create', 'storiesController@create');
+        Route::get('/lists', 'StoriesController@lists');
+        Route::get('/detail', 'StoriesController@detail');
+        Route::post('/create', 'StoriesController@create');
     });
 
     Route::prefix('chapters')->group(function () {
-        Route::get('/detail', 'chapterController@detail');
-        Route::post('/create', 'chapterController@create');
+        Route::get('/detail', 'ChapterController@detail');
+        Route::post('/create', 'ChapterController@create');
     });
 
     Route::prefix('genres')->group(function () {
-        Route::post('/create', 'genresController@create');
+        Route::post('/create', 'GenresController@create');
     });
     Route::prefix('auth')->group(function () {
-        Route::post('/login', 'authenticatedController@login');
-        Route::post('/register', 'authenticatedController@register');
+        Route::post('/login', 'AuthenticatedController@login');
+        Route::post('/register', 'AuthenticatedController@register');
         Route::middleware('auth:sanctum')->group( function () {
-            Route::post('/logout', 'authenticatedController@logout');
+            Route::post('/logout', 'AuthenticatedController@logout');
         });
     });
 });

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\genresRequest;
+use App\Http\Requests\GenresRequest;
 use App\Models\Genres;
 use Illuminate\Support\Str;
 
-class genresController extends Controller
+class GenresController extends Controller
 {
-    public function create(genresRequest $request){
+    public function create(GenresRequest $request){
         $data = $request->validated();
         $data['slug'] = Str::slug($request->title);
         $mGenres = new Genres();

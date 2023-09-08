@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\authRegisterRequest;
-use App\Http\Requests\authRequest;
+use App\Http\Requests\AuthRegisterRequest;
+use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class authenticatedController extends Controller
+class AuthenticatedController extends Controller
 {
-    public function login(authRequest $request)
+    public function login(AuthRequest $request)
     {
         if(Auth::attempt($request->only('email', 'password'))){
             $user = Auth::user();
@@ -37,7 +37,7 @@ class authenticatedController extends Controller
         ]);
     }
 
-    public function register(authRegisterRequest $request){
+    public function register(AuthRegisterRequest $request){
         $regUser = $request->validated();
         $regUser['password'] = bcrypt($request->password);
         $regUser['email'] = $request->email;

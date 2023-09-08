@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\chapterRequest;
-use App\Http\Requests\getChapterRequest;
+use App\Http\Requests\ChapterRequest;
+use App\Http\Requests\GetChapterRequest;
 use Illuminate\Http\Request;
 use App\Models\Chapter;
 use Illuminate\Support\Str;
@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class ChapterController extends Controller
 {
-    public function create(chapterRequest $request){
+    public function create(ChapterRequest $request){
         $data = $request->validated();
         $data['slug'] = Str::slug($request->title);
         $mChapter = new Chapter();
@@ -23,7 +23,7 @@ class ChapterController extends Controller
             return response()->json(['error' => 'Failed to create'], 500);
         }
     }
-    public function detail(getChapterRequest $request){
+    public function detail(GetChapterRequest $request){
         $dataRequest = $request->validated();
         $mStories = new Chapter();
         $result = $mStories->getDetailChapter($dataRequest['id']);

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class getStoriesRequest extends FormRequest
+class GetStoriesRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,18 +28,4 @@ class getStoriesRequest extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'id.required'   => __('ID không được bỏ trống'),
-            'id.numeric'        => __('ID phải là kiểu số'),
-        ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            response()->json(['errors' => $validator->errors()], 422)
-        );
-    }
 }

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\getStoriesRequest;
-use App\Http\Requests\storiesRequest;
+use App\Http\Requests\GetStoriesRequest;
+use App\Http\Requests\StoriesRequest;
 use Illuminate\Http\Request;
 use App\Models\Stories;
 use Illuminate\Support\Str;
 
-class storiesController extends Controller
+class StoriesController extends Controller
 {
     public function lists(Request $request){
         $mStories = new Stories();
@@ -30,7 +30,7 @@ class storiesController extends Controller
         return response()->json($oData, 200);
     }
 
-    public function create(storiesRequest $request){
+    public function create(StoriesRequest $request){
         $data = $request->validated();
         $data['slug'] = Str::slug($request->title);
         $data['genres'] = json_decode($data['genres'], true);
@@ -46,7 +46,7 @@ class storiesController extends Controller
     }
 
 
-    public function detail(getStoriesRequest $request){
+    public function detail(GetStoriesRequest $request){
         $dataRequest = $request->validated();
         $mStories = new Stories();
         $result = $mStories->getDetailStore($dataRequest['id']);

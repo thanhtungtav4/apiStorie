@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class authRegisterRequest extends FormRequest
+class AuthRegisterRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,10 @@ class authRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'repassword' => 'required|same:password',
-        ];
-    }
-    public function messages()
-    {
-        return [
-            'name.required'   => __('Username is required'),
-            'email.required'   => __('Email không được bỏ trống'),
-            'email.email'   => __('Email không đúng định dạng'),
-            'password.required'        => __('Password is required'),
-            'password.same'        => __('RePassword không đúng'),
+            'name' => 'required|string',
+            'email' => 'required|email|string|unique:users',
+            'password' => 'required|string',
+            'repassword' => 'required|same:password|string',
         ];
     }
 
