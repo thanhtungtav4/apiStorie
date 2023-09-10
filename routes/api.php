@@ -45,6 +45,7 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
         Route::post('/register', 'AuthenticatedController@register');
         Route::middleware('auth:sanctum')->group( function () {
             Route::post('/logout', 'AuthenticatedController@logout');
+            Route::post('/change-password', 'AuthenticatedController@change_password');
         });
     });
 });
