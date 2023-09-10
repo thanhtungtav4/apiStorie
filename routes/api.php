@@ -23,16 +23,22 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
     Route::prefix('stories')->group(function () {
         Route::get('/lists', 'StoriesController@lists');
         Route::get('/detail', 'StoriesController@detail');
-        Route::post('/create', 'StoriesController@create');
+        Route::middleware('auth:sanctum')->group( function () {
+            Route::post('/create', 'StoriesController@create');
+        });
     });
 
     Route::prefix('chapters')->group(function () {
         Route::get('/detail', 'ChapterController@detail');
-        Route::post('/create', 'ChapterController@create');
+        Route::middleware('auth:sanctum')->group( function () {
+            Route::post('/create', 'ChapterController@create');
+        });
     });
 
     Route::prefix('genres')->group(function () {
-        Route::post('/create', 'GenresController@create');
+        Route::middleware('auth:sanctum')->group( function () {
+            Route::post('/create', 'GenresController@create');
+        });
     });
     Route::prefix('auth')->group(function () {
         Route::post('/login', 'AuthenticatedController@login');
