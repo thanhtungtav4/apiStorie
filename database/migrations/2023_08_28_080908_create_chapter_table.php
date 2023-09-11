@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('order');
             $table->string('slug');
             $table->string('title', 255); // Adjust the max length as needed
-            $table->text('content')->nullable();
+            $table->longText('content')->nullable();
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->softDeletes();
             $table->timestamps();

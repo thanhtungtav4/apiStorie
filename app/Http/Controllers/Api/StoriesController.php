@@ -14,8 +14,8 @@ class StoriesController extends Controller
     public function lists(Request $request){
         $mStories = new Stories();
         $filter = $request->all();
-        if (isset($filter['title']) && $filter['title'] == null) {
-            unset($filter['title']);
+        if (isset($filter['search']) && $filter['search'] == null) {
+            unset($filter['search']);
         }
         if (isset($filter['chapter']) && $filter['chapter'] == null) {
             unset($filter['chapter']);

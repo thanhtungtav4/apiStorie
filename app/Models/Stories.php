@@ -58,10 +58,19 @@ class Stories extends Model
         return $mStories;
     }
     public function getListStore(array $filter = []){
+        $limitPaginate = !empty($filter['limit_paginate']) ? $filter['limit_paginate'] : 8;
         $mStories = Stories::orderBy('created_at', 'DESC')
                     ->with('genres')
-                    ->withCount('chapters')
-                    ->get();
-        return $mStories;
+                    ->withCount('chapters');
+                    if (!empty($filter['search'])) {
+                        $mStories->where("title", 'like', '%' . $filter['search'] . '%');
+                    }
+                    if (!empty($filter['cursor_paginate']) && ($filter['cursor_paginate'] == true)) {
+                        $mStories->cursorPaginate($limitPaginate);
+                    }
+                    if (!empty($filter['cursor_paginate']) && ($filter['cursor_paginate'] == false)) {
+                        $mStories->paginate($limitPaginate)->get();
+                    }
+        return $mStories->get();
     }
 }

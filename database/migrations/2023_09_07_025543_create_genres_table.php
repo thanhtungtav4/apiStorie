@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('slug');
+            $table->string('slug', 255);
             $table->string('title', 255);
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->softDeletes();

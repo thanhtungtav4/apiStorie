@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('title', 255); // Adjust the max length as needed
             $table->string('author')->nullable();
-            $table->text('description')->nullable();
-            $table->string('image_cover')->nullable();
-            $table->string('image_future')->nullable();
+            $table->longText('description')->nullable();
+            $table->string('image_cover', 255)->nullable();
+            $table->string('image_future', 255)->nullable();
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->softDeletes();
             $table->timestamps();
