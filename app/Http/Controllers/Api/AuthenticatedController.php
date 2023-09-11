@@ -49,6 +49,10 @@ class AuthenticatedController extends Controller
             'access_token' => $token,
         ]);
     }
+
+    public function change_password(){
+        
+    }
 }
 
 

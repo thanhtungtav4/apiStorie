@@ -21,6 +21,7 @@ class Stories extends Model
     {
         return $this->belongsToMany('App\Models\Genres', 'storie_genre');
     }
+
     protected function checkIsset($slug)
     {
         return Stories::where('slug', $slug)->exists();
@@ -57,20 +58,33 @@ class Stories extends Model
                     ->first();
         return $mStories;
     }
-    public function getListStore(array $filter = []){
-        $limitPaginate = !empty($filter['limit_paginate']) ? $filter['limit_paginate'] : 8;
-        $mStories = Stories::orderBy('created_at', 'DESC')
-                    ->with('genres')
-                    ->withCount('chapters');
-                    if (!empty($filter['search'])) {
-                        $mStories->where("title", 'like', '%' . $filter['search'] . '%');
-                    }
-                    if (!empty($filter['cursor_paginate']) && ($filter['cursor_paginate'] == true)) {
-                        $mStories->cursorPaginate($limitPaginate);
-                    }
-                    if (!empty($filter['cursor_paginate']) && ($filter['cursor_paginate'] == false)) {
-                        $mStories->paginate($limitPaginate)->get();
-                    }
-        return $mStories->get();
+
+    public function getListStore(array $filter = [])
+    {
+        $limitPaginate = $filter['limit_paginate'] ?? 8;
+        
+        $mStories = Stories::query()
+            ->orderByDesc('created_at')
+            ->with(['genres'])
+            ->withCount('chapters');
+        if (!empty($filter['search'])) {
+            $searchTerm = '%' . $filter['search'] . '%';
+            $mStories->where("title", 'like', $searchTerm);
+        }
+    
+        if (!empty($filter['genre'])) {
+            $genreName = '%' . $filter['genre'] . '%';
+            $mStories->whereHas('genres', function ($query) use ($genreName) {
+                $query->where('title', 'like', $genreName);
+            });
+        }
+    
+        if (!empty($filter['cursor_paginate']) && $filter['cursor_paginate'] === true) {
+            return $mStories->cursorPaginate($limitPaginate);
+        }
+    
+        return $mStories->paginate($limitPaginate);
     }
+    
+
 }
