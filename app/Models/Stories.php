@@ -85,6 +85,4 @@ class Stories extends Model
     
         return $mStories->paginate($limitPaginate);
     }
-    
-
 }

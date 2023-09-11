@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRegisterRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedController extends Controller
@@ -50,9 +53,32 @@ class AuthenticatedController extends Controller
         ]);
     }
 
-    public function change_password(){
-        
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $validatedData = $request->validated();
+        $user = auth()->user();
+    
+        if (!Hash::check($validatedData['old_password'], $user->password)) {
+            return response()->json([
+                'message' => 'Mật khẩu cũ không đúng',
+            ], 400);
+        }
+    
+        $user->update([
+            'password' => bcrypt($validatedData['password'])
+        ]);
+    
+        // Revoke the existing access token
+        $user->tokens->each(function ($token, $key) {
+            $token->delete();
+        });
+    
+        return response()->json([
+            'message' => 'Đổi mật khẩu thành công. Vui lòng đăng nhập lại.',
+        ]);
     }
+    
+
 }
 
 
