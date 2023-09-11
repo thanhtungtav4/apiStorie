@@ -37,6 +37,7 @@ class Stories extends Model
                 'description' => $data['description'],
                 'image_cover' => $data['image_cover'],
                 'image_future' => $data['image_future'],
+                'status' => $data['status'],
             ]);
             foreach ($data['genres'] as $genreId) {
                 $story->genres()->attach([$genreId => ['genres_id' => $genreId]]);

@@ -14,17 +14,17 @@ class StoriesController extends Controller
     public function lists(Request $request){
         $mStories = new Stories();
         $filter = $request->all();
-        if (isset($filter['status']) && $filter['status'] == -1) {
-            unset($filter['status']);
-        }
         if (isset($filter['title']) && $filter['title'] == null) {
             unset($filter['title']);
         }
-        if (isset($filter['chapters']) && $filter['chapters'] == null) {
-            unset($filter['chapters']);
+        if (isset($filter['chapter']) && $filter['chapter'] == null) {
+            unset($filter['chapter']);
         }
-        if (isset($filter['chapters']) && $filter['chapters'] == null) {
-            unset($filter['chapters']);
+        if (isset($filter['limit']) && $filter['limit'] == null) {
+            unset($filter['limit']);
+        }
+        if (isset($filter['genre']) && $filter['genre'] == null) {
+            unset($filter['genre']);
         }
         $oData = $mStories->getListStore($filter);
         return response()->json($oData, 200);
@@ -52,6 +52,4 @@ class StoriesController extends Controller
         $result = $mStories->getDetailStore($dataRequest['id']);
         return response()->json($result, 200);
     }
-
-
 }
