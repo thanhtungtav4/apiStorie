@@ -57,27 +57,37 @@ class AuthenticatedController extends Controller
     {
         $validatedData = $request->validated();
         $user = auth()->user();
-    
         if (!Hash::check($validatedData['old_password'], $user->password)) {
             return response()->json([
                 'message' => 'Mật khẩu cũ không đúng',
             ], 400);
         }
-    
+
         $user->update([
             'password' => bcrypt($validatedData['password'])
         ]);
-    
+
         // Revoke the existing access token
         $user->tokens->each(function ($token, $key) {
             $token->delete();
         });
-    
+
         return response()->json([
             'message' => 'Đổi mật khẩu thành công. Vui lòng đăng nhập lại.',
         ]);
     }
-    
+
+    public function refreshToken(Request $request){
+        $user = $request->user();
+        $user->tokens()->delete();
+        $token = $user->createToken('token')->plainTextToken;
+        return response()->json(['access_token' => $token]);
+    }
+
+    public function user(Request $request){
+        $user = $request->user();
+        return response()->json($user);
+    }
 
 }
 

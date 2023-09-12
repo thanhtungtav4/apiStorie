@@ -44,8 +44,10 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
         Route::post('/login', 'AuthenticatedController@login');
         Route::post('/register', 'AuthenticatedController@register');
         Route::middleware('auth:sanctum')->group( function () {
+            Route::get('/user', 'AuthenticatedController@user');
             Route::post('/logout', 'AuthenticatedController@logout');
             Route::post('/change-password', 'AuthenticatedController@changePassword');
+            Route::post('/refresh', 'AuthenticatedController@refreshToken');
         });
     });
 });
