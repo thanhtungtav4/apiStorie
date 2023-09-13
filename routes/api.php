@@ -50,4 +50,10 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
             Route::post('/refresh', 'AuthenticatedController@refreshToken');
         });
     });
+
+    Route::prefix('crawl')->group(function () {
+        Route::middleware('auth:sanctum')->group( function () {
+            Route::get('/getlist', 'CrawlController@getListInterface');
+        });
+    });
 });

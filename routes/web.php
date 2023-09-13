@@ -22,6 +22,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         return view('dashboard');
     })->name('dashboard');
 });
-Route::prefix('admin')->middleware('auth:sanctum')->namespace('App\Http\Controllers\Admin')->group(function () {
-    Route::get('/craw', 'CrawController@show');
-});
+// Route::prefix('admin')->middleware('auth:sanctum')->namespace('App\Http\Controllers\Admin')->group(function () {
+//     Route::get('/craw', 'CrawController@show');
+//     Route::post('/craw', 'CrawController@getListInterface');
+// });
