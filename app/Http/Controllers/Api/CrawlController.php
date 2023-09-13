@@ -17,7 +17,7 @@ class CrawlController extends Controller
             if ($response->successful()) {
                 // The API request was successful, you can access the response data like this:
                 $data = $response->json();
-
+                dd($data);
             } else {
                 // The API request was not successful, handle the error here
                 $errorMessage = $response->status() . ': ' . $response->body();
