@@ -11,23 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('crawl_stories', function (Blueprint $table) {
+        Schema::create('crawl_chapers', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->string('by_id');
+            $table->id('chaper_number');
             $table->string('name')->nullable()->default(null);
-            $table->integer('chapter_count')->nullable();
+            $table->unsignedBigInteger('crawl_stories_id');
             $table->enum('status', ['draft', 'is crawl', 'crawl done'])->default('draft');
             $table->timestamps();
         });
     }
 
     /**
-     *
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('crawl_stories');
+        Schema::dropIfExists('crawl_chapers');
     }
 };

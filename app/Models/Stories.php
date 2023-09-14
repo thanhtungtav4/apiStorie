@@ -62,7 +62,7 @@ class Stories extends Model
     public function getListStore(array $filter = [])
     {
         $limitPaginate = $filter['limit_paginate'] ?? 8;
-        
+
         $mStories = Stories::query()
             ->orderByDesc('created_at')
             ->with(['genres'])
@@ -71,18 +71,18 @@ class Stories extends Model
             $searchTerm = '%' . $filter['search'] . '%';
             $mStories->where("title", 'like', $searchTerm);
         }
-    
+
         if (!empty($filter['genre'])) {
             $genreName = '%' . $filter['genre'] . '%';
             $mStories->whereHas('genres', function ($query) use ($genreName) {
                 $query->where('title', 'like', $genreName);
             });
         }
-    
+
         if (!empty($filter['cursor_paginate']) && $filter['cursor_paginate'] === true) {
             return $mStories->cursorPaginate($limitPaginate);
         }
-    
+
         return $mStories->paginate($limitPaginate);
     }
 }

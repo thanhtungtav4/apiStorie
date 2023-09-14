@@ -10,15 +10,26 @@ class CrawlStories extends Model
     use HasFactory;
     protected $table = 'crawl_stories';
     protected $primaryKey = 'id';
-    protected $fillable = ['id', 'type', 'byID', 'name', 'chapter_count' , 'status', 'created_at','updated_at'];
-    public function store($data){
-        $mSave = Genres::create([
+    protected $fillable = ['id', 'type', 'by_id', 'name', 'chapter_count' , 'status', 'created_at','updated_at'];
+    public function store($data)
+    {
+        $story = CrawlStories::firstOrNew([
             'type' => $data['type'],
-            'byID' => $data['byID'],
-            'name' => $data['name'],
-            'chapter_count' => $data['chapter_count'],
-            'status'=> $data['status'],
-            ]);
-        return $mSave;
+            'by_id' => $data['by_id'],
+        ]);
+
+        $story->name = $data['name'];
+        $story->chapter_count = $data['chapter_count'];
+        $story->status = $data['status'];
+
+        $story->save();
+
+        return $story->id;
     }
+
+
 }
+
+
+
+

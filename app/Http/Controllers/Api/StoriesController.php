@@ -37,7 +37,7 @@ class StoriesController extends Controller
         $mStories = new Stories();
         $result = $mStories->store($data);
         if ($result instanceof Stories) {
-            return response()->json(['message' => 'Create Success'], 201);
+            return response()->json(['id' => $result->id, 'message' => 'Create Success'], 201);
         } elseif ($result === 'Post Existed') {
             return response()->json(['error' => 'Post Existed'], 409);
         } else {
