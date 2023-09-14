@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('crawl_chapers', function (Blueprint $table) {
             $table->id();
-            $table->id('chaper_number');
+            $table->integer('chaper_number');
             $table->string('name')->nullable()->default(null);
-            $table->unsignedBigInteger('crawl_stories_id');
-            $table->enum('status', ['draft', 'is crawl', 'crawl done'])->default('draft');
+            $table->string('crawl_stories_id')->default(null);
+            $table->string('stories_save_id')->nullable()->default(null);
+            $table->enum('status', ['draft', 'crawl', 'crawl done'])->default('draft');
             $table->timestamps();
         });
     }

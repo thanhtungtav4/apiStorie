@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stories', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('slug')->unique();
             $table->string('title', 255); // Adjust the max length as needed
             $table->string('author')->nullable();

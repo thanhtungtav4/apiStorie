@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('by_id');
             $table->string('name')->nullable()->default(null);
             $table->integer('chapter_count')->nullable();
-            $table->enum('status', ['draft', 'is crawl', 'crawl done'])->default('draft');
+            $table->string('stories_id')->nullable()->default(null);
+            $table->string('stories_save_id')->nullable()->default(null);
+            $table->enum('status', ['draft', 'crawl', 'crawl done'])->default('draft');
+            $table->enum('status_chapter', ['crawl', 'crawl done'])->default('crawl');
             $table->timestamps();
-        });
+        });  
     }
 
     /**

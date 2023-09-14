@@ -17,16 +17,20 @@ class Chapter extends Model
         return $this->belongsTo('App\Models\Stories', 'storie_id');
     }
 
-    public function store($data){
-        $mSave = Chapter::create([
+    public function store($data)
+    {
+        $chaper = Chapter::firstOrNew([
             'storie_id' => $data['storie_id'],
-            'slug' => $data['slug'],
             'order' => $data['order'],
-            'title' => $data['title'],
-            'content' => $data['content'],
-            'status'=> $data['status'],
-         ]);
-        return $mSave;
+        ]);
+
+        $chaper->slug = $data['slug'];
+        $chaper->title = $data['title'];
+        $chaper->content = $data['content'];
+        $chaper->status = $data['status'];
+        $chaper->save();
+
+        return $chaper;
     }
 
     public function getDetailChapter($id){
