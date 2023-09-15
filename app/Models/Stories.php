@@ -21,34 +21,24 @@ class Stories extends Model
     {
         return $this->belongsToMany('App\Models\Genres', 'storie_genre');
     }
-
-    protected function checkIsset($slug)
-    {
-        return Stories::where('slug', $slug)->exists();
-    }
-
     public function store($data)
     {
-        $checkIsset = $this->checkIsset($data['slug']);
-        if ($checkIsset === false) {
-            $story = Stories::create([
-                'title' => $data['title'],
-                'slug' => $data['slug'],
-                'author' => $data['author'],
-                'description' => $data['description'],
-                'image_cover' => $data['image_cover'],
-                'image_future' => $data['image_future'],
-                'status' => $data['status'],
-            ]);
+        $story = Stories::firstOrNew([
+            'title' => $data['title'],
+            'slug' => $data['slug'],
+        ]);
+        $story->author = $data['author'];
+        $story->description = $data['description'];
+        $story->image_cover = $data['image_cover'];
+        $story->image_future = $data['image_future'];
+        $story->status = $data['status'];
+        $story->save();
+        if (is_array($data['genres'])) {
             foreach ($data['genres'] as $genreId) {
                 $story->genres()->attach([$genreId => ['genres_id' => $genreId]]);
             }
-            return $story;
         }
-
-        if ($checkIsset === true) {
-            return 'Post Existed';
-        }
+        return $story;
     }
 
 
