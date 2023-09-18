@@ -32,7 +32,22 @@ class CrawlChapters extends Model
     }
 
     public function updateStatus($id){
-       return CrawlChapters::find('id', $id)
-       ->update('status', 3)->save();
+        // Use the find method to retrieve the record by ID
+        $crawlChapter = CrawlChapters::find($id);
+    
+        if ($crawlChapter) {
+            // Update the 'status' column with the new value
+            $crawlChapter->status = 3;
+    
+            // Save the changes to the database
+            $crawlChapter->save();
+            
+            // Optionally, you can return the updated record or a success message
+            return $crawlChapter;
+        } else {
+            // Handle the case where the record with the given ID doesn't exist
+            return "Record not found";
+        }
     }
+    
 }

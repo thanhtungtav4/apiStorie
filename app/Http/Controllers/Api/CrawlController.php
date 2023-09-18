@@ -66,7 +66,7 @@ class CrawlController extends Controller
         $CrawlChaper = new CrawlChapters();
         $DataChaper = $CrawlChaper->getAll();
         foreach ($DataChaper as $key => $chaper) {
-            dispatch(new ProcessSaveChapters($chaper->chaper_number,$chaper->crawl_stories_id, $chaper->stories_save_id, $chaper->id));
+            dispatch(new ProcessSaveChapters($chaper->chaper_number, $chaper->crawl_stories_id, $chaper->stories_save_id, $chaper->id));
         }
     }
 

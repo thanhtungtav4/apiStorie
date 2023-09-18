@@ -28,7 +28,7 @@ class ProcessSaveChapters implements ShouldQueue
         $this->chaper_order = $chaper_order;
         $this->crawl_id = $crawl_id;
         $this->stories_id = $stories_id;
-        $this->$update_crawl_id = $update_crawl_id;
+        $this->update_crawl_id = $update_crawl_id;
     }
 
     /**
@@ -39,7 +39,7 @@ class ProcessSaveChapters implements ShouldQueue
         $order = $this->chaper_order;
         $crawl_id = $this->crawl_id;
         $stories_id = $this->stories_id;
-        $update_crawl_id = $this->$update_crawl_id;
+        $update_crawl_id = $this->update_crawl_id;
         $savedId = null; // Initialize the savedId variable
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
@@ -60,9 +60,8 @@ class ProcessSaveChapters implements ShouldQueue
                 // Save the chapter
                 $savedChapter = $mChapter->store($dataSave);
                 if($savedChapter->id){
-                    dd($savedChapter->id);
                     $CrawlChapter = new CrawlChapters;
-                    $updateChapter = $CrawlChapter->updateStatus($update_crawl_id);
+                    $CrawlChapter->updateStatus($update_crawl_id);
                 }
                 $savedId = $savedChapter->id;
             }
