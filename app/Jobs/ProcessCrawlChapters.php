@@ -33,7 +33,7 @@ class ProcessCrawlChapters implements ShouldQueue
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->get('http://api.noveltyt.net/api/v2/chapters/numbers?end=5000&start=1&story_id=' . $crawl_stories_id);
+            ])->get('http://api.noveltyt.net/api/v2/chapters/numbers?end=50000&start=1&story_id=' . $crawl_stories_id);
 
             if ($response->successful()) {
                 $data = $response->json();

@@ -54,8 +54,9 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api')->group(function () {
     Route::prefix('crawl')->group(function () {
         Route::middleware('auth:sanctum')->group( function () {
             Route::get('/getstories', 'CrawlController@getListInterface');
-            Route::get('/getchapter', 'CrawlController@getListChapter');
-            Route::get('/savechaper', 'CrawlController@saveChaper');
+            // Route::get('/getchapter', 'CrawlController@getListChapter');
+            // Route::get('/savechaper', 'CrawlController@saveChaper');
+            Route::get('/test', 'CrawlController@saveCrawlChaperJob');
         });
     });
 });

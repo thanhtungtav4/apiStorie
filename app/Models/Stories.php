@@ -10,7 +10,7 @@ class Stories extends Model
     use HasFactory;
     protected $table = 'stories';
     protected $primaryKey = 'id';
-    protected $fillable = ['id', 'slug', 'title', 'author', 'description', 'image_cover','image_future','status','created_at','updated_at','deleted_at'];
+    protected $fillable = ['id', 'slug', 'title', 'author', 'order', 'description', 'image_cover','image_future','status','created_at','updated_at','deleted_at'];
 
 
     public function chapters(){
@@ -44,7 +44,7 @@ class Stories extends Model
 
     public function getDetailStore($id){
         $mStories = Stories::where('id', $id)
-                    ->with('chapters:storie_id,title,created_at,updated_at', 'genres')
+                    ->with('chapters:storie_id,order,title,slug,created_at,updated_at', 'genres')
                     ->first();
         return $mStories;
     }

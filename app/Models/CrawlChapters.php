@@ -22,7 +22,17 @@ class CrawlChapters extends Model
         $chaper->name = $data['name'];
         $chaper->status = $data['status'];
         $chaper->save();
-
         return $chaper;
+    }
+
+    public function getAll(){
+        $chaper = CrawlChapters::select('id', 'chaper_number', 'crawl_stories_id', 'stories_save_id', 'status')
+                  ->where('status', 2)->get();
+        return $chaper;
+    }
+
+    public function updateStatus($id){
+       return CrawlChapters::find('id', $id)
+       ->update('status', 3)->save();
     }
 }
