@@ -36,7 +36,7 @@ class CrawlController extends Controller
                         'description' => '',
                         'image_cover' => '',
                         'image_future' => '',
-                        'status' => '1',
+                        'status' => '2',
                     ];
                     $StorieId = $mStories->store($dataStorie);
                     $dataSave = [
