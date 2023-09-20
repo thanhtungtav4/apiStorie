@@ -49,6 +49,7 @@ class ProcessCrawlChapters implements ShouldQueue
 
     private function createCrawlChapter($value)
     {
+        $CrawlChapters = new CrawlChapters();
         $dataStoriesSave = [
             'chaper_number' => $value['number'],
             'name' => $value['title'],
@@ -56,7 +57,6 @@ class ProcessCrawlChapters implements ShouldQueue
             'stories_save_id' => $this->stories_id,
             'status' => 2,
         ];
-
-        CrawlChapters::store($dataStoriesSave);
+        $CrawlChapters->store($dataStoriesSave);
     }
 }
