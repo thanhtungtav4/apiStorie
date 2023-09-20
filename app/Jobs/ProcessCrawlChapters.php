@@ -16,9 +16,6 @@ class ProcessCrawlChapters implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $crawl_stories_id;
     protected $stories_id;
-    /**
-     * Create a new job instance.
-     */
     public function __construct($crawl_stories_id, $stories_id)
     {
         $this->crawl_stories_id = $crawl_stories_id;
@@ -27,41 +24,39 @@ class ProcessCrawlChapters implements ShouldQueue
 
     public function handle()
     {
-        $crawl_stories_id = $this->crawl_stories_id;
-        $stories_id = $this->stories_id;
-        $savedIds = [];
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->get('http://api.noveltyt.net/api/v2/chapters/numbers?end=50000&start=1&story_id=' . $crawl_stories_id);
+            ])->get("http://api.noveltyt.net/api/v2/chapters/numbers?end=50000&start=1&story_id=" . $this->crawl_stories_id);
 
-            if ($response->successful()) {
-                $data = $response->json();
-                if (!empty($data['data'])) {
-                    $mCrawlChapter = new CrawlChapters();
-                    foreach ($data['data'] as $value) {
-                        $dataStoriesSave = [
-                            'chaper_number' => $value['number'],
-                            'name' => $value['title'],
-                            'crawl_stories_id' => $crawl_stories_id,
-                            'stories_save_id'=> $stories_id,
-                            'status' => 2,
-                        ];
-                        $savedId = $mCrawlChapter->store($dataStoriesSave);
-                        $savedIds[] = $savedId;
-                    }
-                }
-            } else {
+            if (!$response->successful()) {
                 $errorMessage = $response->status() . ': ' . $response->body();
-                // Log or handle the error message as needed
+                \Log::info('An error occurred while processing');
+                return;
+            }
+
+            $data = $response->json();
+
+            if (!empty($data['data'])) {
+                foreach ($data['data'] as $value) {
+                    $this->createCrawlChapter($value);
+                }
             }
         } catch (\Exception $e) {
-            // Log or handle the exception as needed
+            \Log::info('An error occurred while processing');
         }
+    }
 
-        // Optionally, return any results or information you need.
-        // For example, you can return $savedIds or any other data.
+    private function createCrawlChapter($value)
+    {
+        $dataStoriesSave = [
+            'chaper_number' => $value['number'],
+            'name' => $value['title'],
+            'crawl_stories_id' => $this->crawl_stories_id,
+            'stories_save_id' => $this->stories_id,
+            'status' => 2,
+        ];
 
-        // Note: The job will automatically be dispatched to the queue when pushed.
+        CrawlChapters::store($dataStoriesSave);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,59 +17,65 @@ use Illuminate\Support\Str;
 class ProcessSaveChapters implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    protected $chaper_order;
-    protected $crawl_id;
-    protected $stories_id;
-    protected $update_crawl_id;
+
+    protected $chapterOrder;
+    protected $crawlId;
+    protected $storiesId;
+    protected $updateCrawlId;
+
     /**
      * Create a new job instance.
      */
-    public function __construct($chaper_order, $crawl_id, $stories_id, $update_crawl_id)
+    public function __construct($chapterOrder, $crawlId, $storiesId, $updateCrawlId)
     {
-        $this->chaper_order = $chaper_order;
-        $this->crawl_id = $crawl_id;
-        $this->stories_id = $stories_id;
-        $this->update_crawl_id = $update_crawl_id;
+        $this->chapterOrder = $chapterOrder;
+        $this->crawlId = $crawlId;
+        $this->storiesId = $storiesId;
+        $this->updateCrawlId = $updateCrawlId;
     }
 
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle()
     {
-        $order = $this->chaper_order;
-        $crawl_id = $this->crawl_id;
-        $stories_id = $this->stories_id;
-        $update_crawl_id = $this->update_crawl_id;
+        $order = $this->chapterOrder;
+        $crawlId = $this->crawlId;
+        $storiesId = $this->storiesId;
+        $updateCrawlId = $this->updateCrawlId;
         $savedId = null; // Initialize the savedId variable
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->get('http://api.noveltyt.net/api/v2/chapters/detail?number='. $order .'&story_id=' . $crawl_id);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            if (!empty($data['data'])) {
-                $mChapter = new Chapter();
-                $dataSave = [
-                    'title' =>  $data['data']['title'],
-                    'slug' =>   Str::slug($data['data']['title']),
-                    'content' => $data['data']['content'],
-                    'order' => $data['data']['number'],
-                    'storie_id' => $stories_id,
-                    'status' => 2,
-                ];
-                // Save the chapter
-                $savedChapter = $mChapter->store($dataSave);
-                if($savedChapter->id){
-                    $CrawlChapter = new CrawlChapters;
-                    $CrawlChapter->updateStatus($update_crawl_id);
+        // Use try-catch to handle exceptions gracefully
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->get("http://api.noveltyt.net/api/v2/chapters/detail?number=$order&story_id=$crawlId");
+
+            if ($response->successful()) {
+                $data = $response->json();
+                if (!empty($data['data'])) {
+                    $mChapter = new Chapter();
+                    $dataSave = [
+                        'title' => $data['data']['title'],
+                        'slug' => Str::slug($data['data']['title']),
+                        'content' => $data['data']['content'],
+                        'order' => $data['data']['number'],
+                        'storie_id' => $storiesId,
+                        'status' => 2,
+                    ];
+                    // Save the chapter
+                    $savedChapter = $mChapter->store($dataSave);
+                    if ($savedChapter->id) {
+                        $crawlChapter = new CrawlChapters;
+                        $crawlChapter->updateStatus($updateCrawlId);
+                    }
+                    $savedId = $savedChapter->id;
                 }
-                $savedId = $savedChapter->id;
+            } else {
+                \Log::info('An error occurred while processing');
             }
-        } else {
-            $errorMessage = $response->status() . ': ' . $response->body();
-            dd($errorMessage);
+        } catch (Exception $e) {
+            \Log::error('An error occurred while processing: ' . $e->getMessage());
         }
-        \Log::info('Data save chaper processed: ' . json_encode($savedId));
     }
 }
