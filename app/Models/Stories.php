@@ -44,7 +44,7 @@ class Stories extends Model
 
     public function getDetailStore($id){
         $mStories = Stories::where('id', $id)
-                    ->with('chapters:storie_id,order,title,slug,created_at,updated_at', 'genres')
+                    ->with('chapters:id,storie_id,order,title,slug,created_at,updated_at', 'genres')
                     ->first();
         return $mStories;
     }
